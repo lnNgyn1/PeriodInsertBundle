@@ -1,0 +1,53 @@
+{% block periodinsert_form %}
+    {% form_theme form 'form/horizontal.html.twig' %}
+    {% embed template %}
+        {% block form_body %}
+            {% if form.user is defined %}
+                {{ form_row(form.user, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.user.vars.name}}) }}
+            {% endif %}
+            {% if form.beginToEnd is defined %}
+                {{ form_row(form.beginToEnd, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.beginToEnd.vars.name}}) }}
+            {% endif %}
+            {% if form.customer is defined %}
+                {{ form_row(form.customer, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.customer.vars.name}}) }}
+            {% endif %}
+            {% if form.project is defined %}
+                {{ form_row(form.project, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.project.vars.name}}) }}
+            {% endif %}
+            {% if form.activity is defined %}
+                {{ form_row(form.activity, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.activity.vars.name}}) }}
+            {% endif %}
+            {% if form.durationPerDay is defined %}
+                {{ form_row(form.durationPerDay, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.durationPerDay.vars.name}}) }}
+            {% endif %}
+            {% if form.description is defined %}
+                {{ form_row(form.description, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.description.vars.name}}) }}
+            {% endif %}
+            {% if form.tags is defined %}
+                {{ form_row(form.tags, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.tags.vars.name}}) }}
+            {% endif %}
+            {% if form.fixedRate is defined or form.hourlyRate is defined or form.billableMode is defined or form.exported is defined %}
+                {% embed '@theme/embeds/collapsible.html.twig' with {id: 'timesheet_extended_settings'} %}
+                    {% import "macros/widgets.html.twig" as widgets %}
+                    {% block title %}{{ 'extended_settings'|trans }}{% endblock %}
+                    {% block body %}
+                        {% if form.fixedRate is defined %}
+                            {{ form_row(form.fixedRate, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.fixedRate.vars.name}}) }}
+                        {% endif %}
+                        {% if form.hourlyRate is defined %}
+                            {{ form_row(form.hourlyRate, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.hourlyRate.vars.name}}) }}
+                        {% endif %}
+                        {% if form.billableMode is defined %}
+                            {{ form_row(form.billableMode, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.billableMode.vars.name}}) }}
+                        {% endif %}
+                        {% if form.exported is defined %}
+                            {{ form_row(form.exported, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.exported.vars.name}}) }}
+                        {% endif %}
+                    {% endblock %}
+                {% endembed %}
+            {% endif %}
+
+            {{ form_rest(form) }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
