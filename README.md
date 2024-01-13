@@ -1,6 +1,6 @@
 # PeriodInsertBundle
 
-A Kimai plugin which generates entries for a given time-period.
+A plugin for Kimai that generates entries for a given time period.
 
 ## Installation
 
@@ -26,7 +26,7 @@ bin/console kimai:reload --env=prod
 
 This bundle comes with the following permission:
 
-- `period_insert` - show the period insert screen to generate entries for a given time-period
+- `period_insert` - show the period insert screen to generate entries for a given time period
 
 By default, it is assigned to each user with the role `ROLE_SUPER_ADMIN`.
 
