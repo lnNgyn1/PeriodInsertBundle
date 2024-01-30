@@ -70,6 +70,13 @@ class PeriodInsertType extends AbstractType
         $this->addRates($builder, $currency, $options);
         $this->addBillable($builder, $options);
         $this->addExported($builder, $options);
+        $this->addMonday($builder);
+        $this->addTuesday($builder);
+        $this->addWednesday($builder);
+        $this->addThursday($builder);
+        $this->addFriday($builder);
+        $this->addSaturday($builder);
+        $this->addSunday($builder);
     }
 
     protected function showCustomer(array $options, bool $isNew, int $customerCount): bool
@@ -297,6 +304,55 @@ class PeriodInsertType extends AbstractType
 
         $builder->add('exported', YesNoType::class, [
             'label' => 'exported'
+        ]);
+    }
+
+    protected function addMonday(FormBuilderInterface $builder): void
+    {
+        $builder->add('monday', YesNoType::class, [
+            'label' => 'Insert Monday?'
+        ]);
+    }
+
+    protected function addTuesday(FormBuilderInterface $builder): void
+    {
+        $builder->add('tuesday', YesNoType::class, [
+            'label' => 'Insert Tuesday?'
+        ]);
+    }
+
+    protected function addWednesday(FormBuilderInterface $builder): void
+    {
+        $builder->add('wednesday', YesNoType::class, [
+            'label' => 'Insert Wednesday?'
+        ]);
+    }
+
+    protected function addThursday(FormBuilderInterface $builder): void
+    {
+        $builder->add('thursday', YesNoType::class, [
+            'label' => 'Insert Thursday?'
+        ]);
+    }
+
+    protected function addFriday(FormBuilderInterface $builder): void
+    {
+        $builder->add('friday', YesNoType::class, [
+            'label' => 'Insert Friday?'
+        ]);
+    }
+
+    protected function addSaturday(FormBuilderInterface $builder): void
+    {
+        $builder->add('saturday', YesNoType::class, [
+            'label' => 'Insert Saturday?'
+        ]);
+    }
+
+    protected function addSunday(FormBuilderInterface $builder): void
+    {
+        $builder->add('sunday', YesNoType::class, [
+            'label' => 'Insert Sunday?'
         ]);
     }
 

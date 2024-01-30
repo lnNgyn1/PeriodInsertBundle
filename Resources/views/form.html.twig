@@ -26,6 +26,33 @@
             {% if form.tags is defined %}
                 {{ form_row(form.tags, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.tags.vars.name}}) }}
             {% endif %}
+            {% embed '@theme/embeds/collapsible.html.twig' with {id: 'timesheet_select_days'} %}
+                {% import "macros/widgets.html.twig" as widgets %}
+                {% block title %}{{ 'Select days'|trans }}{% endblock %}
+                {% block body %}
+                    {% if form.monday is defined %}
+                        {{ form_row(form.monday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.monday.vars.name}}) }}
+                    {% endif %}
+                    {% if form.tuesday is defined %}
+                        {{ form_row(form.tuesday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.tuesday.vars.name}}) }}
+                    {% endif %}
+                    {% if form.wednesday is defined %}
+                        {{ form_row(form.wednesday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.wednesday.vars.name}}) }}
+                    {% endif %}
+                    {% if form.thursday is defined %}
+                        {{ form_row(form.thursday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.thursday.vars.name}}) }}
+                    {% endif %}
+                    {% if form.friday is defined %}
+                        {{ form_row(form.friday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.friday.vars.name}}) }}
+                    {% endif %}
+                    {% if form.saturday is defined %}
+                        {{ form_row(form.saturday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.saturday.vars.name}}) }}
+                    {% endif %}
+                    {% if form.sunday is defined %}
+                        {{ form_row(form.sunday, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.sunday.vars.name}}) }}
+                    {% endif %}
+                {% endblock %}
+            {% endembed %}
             {% if form.fixedRate is defined or form.hourlyRate is defined or form.billableMode is defined or form.exported is defined %}
                 {% embed '@theme/embeds/collapsible.html.twig' with {id: 'timesheet_extended_settings'} %}
                     {% import "macros/widgets.html.twig" as widgets %}

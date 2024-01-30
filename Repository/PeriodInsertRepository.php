@@ -53,7 +53,17 @@ class PeriodInsertRepository
         $daysToSave = $this->getDatesFromRange($entity->getBegin(), $entity->getEnd());
 
         foreach ($daysToSave AS $dayToSave) {
-            $this->createTimesheet($entity, $dayToSave, $entity->getDurationPerDay());
+            $day = $this->getDay($dayToSave);
+            if ($entity->getMonday() && $day === 1
+                || $entity->getTuesday() && $day === 2
+                || $entity->getWednesday() && $day === 3
+                || $entity->getThursday() && $day === 4
+                || $entity->getFriday() && $day === 5
+                || $entity->getSaturday() && $day === 6
+                || $entity->getSunday() && $day === 0)
+            {
+                $this->createTimesheet($entity, $dayToSave, $entity->getDurationPerDay());
+            }
         }
     }
 
@@ -79,6 +89,16 @@ class PeriodInsertRepository
         }
 
         return $return;
+    }
+
+    /**
+     * @param string $day
+     * @return int
+     * @throws Exception
+     */
+    private function getDay(string $day): int
+    {
+        return (int)(new DateTime($day))->format('w');
     }
 
     /**

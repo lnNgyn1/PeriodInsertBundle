@@ -23,6 +23,13 @@ class PeriodInsert
     private $hourlyRate;
     private $exported;
     private $billableMode;
+    private $monday;
+    private $tuesday;
+    private $wednesday;
+    private $thursday;
+    private $friday;
+    private $saturday;
+    private $sunday;
 
     /**
      * @return mixed
@@ -214,5 +221,117 @@ class PeriodInsert
     public function setExported($exported): void
     {
         $this->exported = $exported;
+    }
+
+    /**
+     * @return mixed $monday
+     */
+    public function getMonday()
+    {
+        return $this->monday;
+    }
+
+    /**
+     * @param mixed $monday
+     */
+    public function setMonday($monday): void
+    {
+        $this->monday = $monday;
+    }
+
+    /**
+     * @return mixed $tuesday
+     */
+    public function getTuesday()
+    {
+        return $this->tuesday;
+    }
+
+    /**
+     * @param mixed $tuesday
+     */
+    public function setTuesday($tuesday): void
+    {
+        $this->tuesday = $tuesday;
+    }
+
+    /**
+     * @return mixed $wednesday
+     */
+    public function getWednesday()
+    {
+        return $this->wednesday;
+    }
+
+    /**
+     * @param mixed $wednesday
+     */
+    public function setWednesday($wednesday): void
+    {
+        $this->wednesday = $wednesday;
+    }
+
+    /**
+     * @return mixed $thursday
+     */
+    public function getThursday()
+    {
+        return $this->thursday;
+    }
+
+    /**
+     * @param mixed $thursday
+     */
+    public function setThursday($thursday): void
+    {
+        $this->thursday = $thursday;
+    }
+
+    /**
+     * @return mixed $friday
+     */
+    public function getFriday()
+    {
+        return $this->friday;
+    }
+
+    /**
+     * @param mixed $friday
+     */
+    public function setFriday($friday): void
+    {
+        $this->friday = $friday;
+    }
+
+    /**
+     * @return mixed $saturday
+     */
+    public function getSaturday()
+    {
+        return $this->saturday;
+    }
+
+    /**
+     * @param mixed $saturday
+     */
+    public function setSaturday($saturday): void
+    {
+        $this->saturday = $saturday;
+    }
+
+    /**
+     * @return mixed $sunday
+     */
+    public function getSunday()
+    {
+        return $this->sunday;
+    }
+
+    /**
+     * @param mixed $sunday
+     */
+    public function setSunday($sunday): void
+    {
+        $this->sunday = $sunday;
     }
 }
