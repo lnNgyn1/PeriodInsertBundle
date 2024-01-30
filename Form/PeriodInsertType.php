@@ -283,9 +283,6 @@ class PeriodInsertType extends AbstractType
             ])
             ->add('hourlyRate', HourlyRateType::class, [
                 'currency' => $currency,
-                'attr' => [
-                    'placeholder' => '0.00',
-                ],
             ]);
     }
 
