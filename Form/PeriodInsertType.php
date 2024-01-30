@@ -259,10 +259,6 @@ class PeriodInsertType extends AbstractType
 
     protected function addTags(FormBuilderInterface $builder): void
     {
-        if (!$options['include_rate']) {
-            return;
-        }
-
         $builder->add('tags', TagsType::class, [
             'required' => false,
         ]);
