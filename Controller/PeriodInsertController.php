@@ -64,7 +64,7 @@ class PeriodInsertController extends AbstractController
         }
 
         $page = new PageSetup('periodinsert.title');
-        $page->setHelp('https://gitlab.com/taurus6033739/PeriodInsertBundle');
+        $page->setHelp('https://github.com/lnNgyn1/PeriodInsertBundle');
 
         return $this->render('@PeriodInsert/index.html.twig', [
             'page_setup' => $page,
