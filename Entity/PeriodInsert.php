@@ -14,6 +14,7 @@ class PeriodInsert
 
     private $user;
     private $beginToEnd;
+    private $beginTime;
     private $project;
     private $activity;
     private $durationPerDay;
@@ -77,6 +78,22 @@ class PeriodInsert
     public function getEnd()
     {
         return $this->getBeginToEnd()->getEnd();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBeginTime()
+    {
+        return $this->beginTime;
+    }
+
+    /**
+     * @param mixed $beginTime
+     */
+    public function setBeginTime($beginTime): void
+    {
+        $this->beginTime = $beginTime;
     }
     
     /**

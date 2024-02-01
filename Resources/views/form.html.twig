@@ -8,6 +8,9 @@
             {% if form.beginToEnd is defined %}
                 {{ form_row(form.beginToEnd, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.beginToEnd.vars.name}}) }}
             {% endif %}
+            {% if form.beginTime is defined %}
+                {{ form_row(form.beginTime, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.beginTime.vars.name}}) }}
+            {% endif %}
             {% if form.customer is defined %}
                 {{ form_row(form.customer, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.customer.vars.name}}) }}
             {% endif %}

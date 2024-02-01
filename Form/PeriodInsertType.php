@@ -22,6 +22,7 @@ use App\Form\Type\FixedRateType;
 use App\Form\Type\HourlyRateType;
 use App\Form\Type\ProjectType;
 use App\Form\Type\TagsType;
+use App\Form\Type\TimePickerType;
 use App\Form\Type\TimesheetBillableType;
 use App\Form\Type\UserType;
 use App\Form\Type\YesNoType;
@@ -34,6 +35,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PeriodInsertType extends AbstractType
 {
@@ -52,6 +54,18 @@ class PeriodInsertType extends AbstractType
 
         $this->addUser($builder, $options);
         $this->addDateRange($builder, $options, false);
+
+        $dateTimeOptions = [
+            'model_timezone' => $options['timezone'],
+            'view_timezone' => $options['timezone'],
+        ];
+
+        // primarily for API usage, where we cannot use a user/locale specific format
+        if (null !== $options['date_format']) {
+            $dateTimeOptions['format'] = $options['date_format'];
+        }
+
+        $this->addBeginTime($builder, $dateTimeOptions);
         
         if ($this->showCustomer($options, $isNew, $customerCount)) {
             $this->addCustomer($builder, $customer);
@@ -120,6 +134,18 @@ class PeriodInsertType extends AbstractType
         }
 
         $builder->add('beginToEnd', DateRangeType::class, $params);
+    }
+
+    protected function addBeginTime(FormBuilderInterface $builder, array $dateTimeOptions): void
+    {
+        $timeOptions = $dateTimeOptions;
+
+        $builder->add('beginTime', TimePickerType::class, array_merge($timeOptions, [
+            'label' => 'Begin',
+            'constraints' => [
+                new NotBlank()
+            ]
+        ]));
     }
 
     protected function addCustomer(FormBuilderInterface $builder, ?Customer $customer = null): void
@@ -374,6 +400,7 @@ class PeriodInsertType extends AbstractType
             'create_activity' => false,
             'duration_minutes' => null,
             'duration_hours' => $maxHours,
+            'date_format' => null,
             'timezone' => date_default_timezone_get(),
             'customer' => false,
             'attr' => [

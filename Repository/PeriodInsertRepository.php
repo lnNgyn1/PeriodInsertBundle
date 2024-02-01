@@ -111,10 +111,11 @@ class PeriodInsertRepository
      */
     protected function createTimesheet(PeriodInsert $sheet, string $begin, int $duration): void
     {
-        $begin = $begin . '07:00:00';
+        $begin = new DateTime($begin);
+        $begin->setTime($sheet->getBeginTime()->format('H'), $sheet->getBeginTime()->format('i'));
         $entry = new Timesheet();
         $entry->setUser($sheet->getUser());
-        $entry->setBegin(new DateTime($begin));
+        $entry->setBegin($begin);
         $entry->setDescription($sheet->getDescription());
         foreach ($sheet->getTags() as $tag) {
             $entry->addTag($tag);
@@ -128,7 +129,7 @@ class PeriodInsertRepository
             $entry->setActivity($sheet->getActivity());
         }
 
-        $entry->setEnd((new DateTime($begin))->add(new DateInterval('PT' . $duration . 'S')));
+        $entry->setEnd((clone $begin)->add(new DateInterval('PT' . $duration . 'S')));
         $entry->setDuration(strtotime($entry->getEnd()->format($this->dateTimeFormat)) - strtotime($entry->getBegin()->format($this->dateTimeFormat)));
 
         if (null !== $sheet->getFixedRate()) {
