@@ -11,6 +11,9 @@
             {% if form.beginTime is defined %}
                 {{ form_row(form.beginTime, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.beginTime.vars.name}}) }}
             {% endif %}
+            {% if form.durationPerDay is defined %}
+                {{ form_row(form.durationPerDay, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.durationPerDay.vars.name}}) }}
+            {% endif %}
             {% if form.customer is defined %}
                 {{ form_row(form.customer, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.customer.vars.name}}) }}
             {% endif %}
@@ -19,9 +22,6 @@
             {% endif %}
             {% if form.activity is defined %}
                 {{ form_row(form.activity, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.activity.vars.name}}) }}
-            {% endif %}
-            {% if form.durationPerDay is defined %}
-                {{ form_row(form.durationPerDay, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.durationPerDay.vars.name}}) }}
             {% endif %}
             {% if form.description is defined %}
                 {{ form_row(form.description, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.description.vars.name}}) }}

@@ -253,7 +253,7 @@ class PeriodInsertType extends AbstractType
     protected function addDuration(FormBuilderInterface $builder, array $options, bool $autofocus = false): void
     {
         $durationOptions = [
-            'required' => false,
+            'required' => true,
             //'toggle' => true,
             'attr' => [
                 'placeholder' => '0:00',
