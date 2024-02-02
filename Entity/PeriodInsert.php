@@ -33,6 +33,20 @@ class PeriodInsert
     private $sunday;
 
     /**
+     * PeriodInsertRepository constructor.
+     */
+    public function __construct()
+    {
+        $this->monday = true;
+        $this->tuesday = true;
+        $this->wednesday = true;
+        $this->thursday = true;
+        $this->friday = true;
+        $this->saturday = true;
+        $this->sunday = true;
+    }
+
+    /**
      * @return mixed
      */
     public function getUser()
