@@ -68,7 +68,7 @@ class PeriodInsertController extends AbstractController
 
         return $this->render('@PeriodInsert/index.html.twig', [
             'page_setup' => $page,
-            'route_back' => 'period_insert',
+            'route_back' => 'timesheet',
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
