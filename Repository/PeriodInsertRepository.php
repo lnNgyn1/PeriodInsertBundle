@@ -17,6 +17,7 @@ use App\Model\BudgetStatisticModel;
 use App\Project\ProjectStatisticService;
 use App\Repository\TimesheetRepository;
 use App\Timesheet\RateServiceInterface;
+use App\Timesheet\TimesheetService;
 use App\Utils\Duration;
 use App\Utils\LocaleFormatter;
 use App\WorkingTime\WorkingTimeService;
@@ -33,7 +34,8 @@ class PeriodInsertRepository
         private readonly RateServiceInterface $rateService,
         private readonly AuthorizationCheckerInterface $security,
         private readonly LocaleService $localeService,
-        private readonly WorkingTimeService $workService
+        private readonly WorkingTimeService $workService,
+        private readonly TimesheetService $timesheetService,
     ) {
     }
 
@@ -247,13 +249,34 @@ class PeriodInsertRepository
 
     /**
      * @param PeriodInsert $entity
+     * @return string[]
+     */
+    public function findHolidays(PeriodInsert $entity): array
+    {
+        $holidays = [];
+        for ($begin = clone $entity->getBegin(); $begin <= $entity->getEnd(); $begin->modify('first day of next month')) {
+            $month = $this->workService->getMonth($entity->getUser(), $begin, (clone $begin)->modify('last day of this month'));
+            foreach ($month->getDays() as $day) {
+                if ($day->hasAddons()) {
+                    $holidays[] = $day->getDay()->format('Y-m-d');
+                }
+            }
+        }
+        return $holidays;
+    }
+
+    /**
+     * @param PeriodInsert $entity
      * @return void
      */
     public function saveTimesheet(PeriodInsert $entity): void
     {
+        $holidays = $this->findHolidays($entity);
         for ($begin = clone $entity->getBegin(); $begin <= $entity->getEnd(); $begin->modify('+1 day')) {
-            if ($entity->isDayValid($begin) && $this->workService->getContractMode($entity->getUser())->getCalculator($entity->getUser())->isWorkDay($begin)) {
-                $this->timesheetRepository->save($this->createTimesheet($entity, $begin));
+            if ($entity->isDayValid($begin) &&
+                $this->workService->getContractMode($entity->getUser())->getCalculator($entity->getUser())->isWorkDay($begin)
+                && !in_array($begin->format('Y-m-d'), $holidays)) {
+                $this->timesheetService->saveNewTimesheet($this->createTimesheet($entity, $begin));
             }
         }
     }
