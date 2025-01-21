@@ -273,9 +273,7 @@ class PeriodInsertRepository
     {
         $holidays = $this->findHolidays($entity);
         for ($begin = clone $entity->getBegin(); $begin <= $entity->getEnd(); $begin->modify('+1 day')) {
-            if ($entity->isDayValid($begin) &&
-                $this->workService->getContractMode($entity->getUser())->getCalculator($entity->getUser())->isWorkDay($begin)
-                && !in_array($begin->format('Y-m-d'), $holidays)) {
+            if ($entity->isDayValid($begin) && $this->workService->getContractMode($entity->getUser())->getCalculator($entity->getUser())->isWorkDay($begin) && !in_array($begin->format('Y-m-d'), $holidays)) {
                 $this->timesheetService->saveNewTimesheet($this->createTimesheet($entity, $begin));
             }
         }
