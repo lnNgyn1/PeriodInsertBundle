@@ -1,17 +1,17 @@
-# Version 1.7
+# Version 1.7.0
 
 Compatible with Kimai version 2.36.0 or higher.
 
 - Updated to make compatible with Kimai version 2.36.0
 
-# Version 1.6
+# Version 1.6.0
 
 Compatible with Kimai version 2.26.0 or higher.
 
 - Added meta fields to address [#18](https://github.com/lnNgyn1/PeriodInsertBundle/issues/18)
 - Added change log
 
-# Version 1.5
+# Version 1.5.0
 
 Compatible with Kimai version 2.26.0 or higher.
 
@@ -20,7 +20,7 @@ Compatible with Kimai version 2.26.0 or higher.
 - Added options to system configuration menu to allow creating time entries on absences and non-work days
 - Miscellaneous formatting and code style changes
 
-# Version 1.4
+# Version 1.4.0
 
 Compatible with Kimai version 2.26.0 or higher.
 
@@ -35,14 +35,14 @@ Compatible with Kimai version 2.26.0 or higher.
 - Corrected `include_user` form permission
 - Updated title
 
-# Version 1.3
+# Version 1.3.0
 
 Compatible with Kimai version 2.26.0 or higher.
 
 - Added work day and absences check to timesheet entry to address [#9](https://github.com/lnNgyn1/PeriodInsertBundle/issues/9)
 - Removed punch or time-clock tracking mode check to resolve [#10](https://github.com/lnNgyn1/PeriodInsertBundle/issues/10)
 
-# Version 1.2
+# Version 1.2.0
 
 Compatible with Kimai version 2.1.0 or higher.
 
@@ -65,7 +65,7 @@ Compatible with Kimai version 2.1.0 or higher.
 
 ### A detailed writeup can be found [here](https://github.com/lnNgyn1/PeriodInsertBundle/issues/4#issuecomment-2384355872).
 
-# Version 1.1
+# Version 1.1.0
 
 Compatible with Kimai version 2.1.0 or higher.
 
@@ -79,6 +79,6 @@ Compatible with Kimai version 2.1.0 or higher.
 - Required duration field
 - Route back to timesheet page
 
-# Version 1.0
+# Version 1.0.0
 
 Initial release. Compatible with Kimai version 2.1.0 or higher.
