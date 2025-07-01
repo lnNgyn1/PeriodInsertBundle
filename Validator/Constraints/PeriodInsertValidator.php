@@ -60,7 +60,7 @@ final class PeriodInsertValidator extends ConstraintValidator
 
         $this->validateTimeRange($value);
         $this->validateActivityAndProject($value);
-        $this->validateZeroDuration($value);
+        $this->validateDuration($value);
 
         // only call validators if period insert has valid days to insert
         if ($this->validatePeriodInsert($value)) {
@@ -160,17 +160,25 @@ final class PeriodInsertValidator extends ConstraintValidator
     /**
      * @param PeriodInsertEntity $periodInsert
      */
-    private function validateZeroDuration(PeriodInsertEntity $periodInsert): void
+    private function validateDuration(PeriodInsertEntity $periodInsert): void
     {
         if ($this->systemConfiguration->isTimesheetAllowZeroDuration()) {
             return;
         }
 
-        if ($periodInsert->getDuration() === 0) {
+        if (null !== $periodInsert->getDuration() && $periodInsert->getDuration() === 0) {
             $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::ZERO_DURATION_ERROR))
                 ->atPath('duration')
                 ->setTranslationDomain('validators')
                 ->setCode(PeriodInsertConstraint::ZERO_DURATION_ERROR)
+                ->addViolation();
+        }
+
+        if (null !== $periodInsert->getDuration() && $periodInsert->getDuration() < 0) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR))
+                ->atPath('duration')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR)
                 ->addViolation();
         }
     }
@@ -181,16 +189,6 @@ final class PeriodInsertValidator extends ConstraintValidator
      */
     private function validatePeriodInsert(PeriodInsertEntity $periodInsert): bool
     {
-        if ($periodInsert->getDuration() < 0) {
-            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR))
-                ->atPath('duration')
-                ->setTranslationDomain('validators')
-                ->setCode(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR)
-                ->addViolation();
-
-            return false;
-        }
-
         if (!$periodInsert->getValidDays()) {
             $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::MISSING_DAY_ERROR))
                 ->atPath('daterange')
@@ -328,6 +326,11 @@ final class PeriodInsertValidator extends ConstraintValidator
         }
         
         if (null === ($project = $periodInsert->getProject())) {
+            return;
+        }
+
+        // only check budget if duration is not negative
+        if (null !== $periodInsert->getDuration() && $periodInsert->getDuration() >= 0) {
             return;
         }
 

@@ -43,7 +43,7 @@ final class PeriodInsert extends Constraint
         self::PROJECT_DISALLOWS_GLOBAL_ACTIVITY_ERROR => 'Global activities are forbidden for the selected project.',
         self::DISABLED_CUSTOMER_ERROR => 'Cannot start a disabled customer.',
         self::ZERO_DURATION_ERROR => 'Duration cannot be zero.',
-        self::NEGATIVE_DURATION_ERROR => 'A negative duration is not allowed.',
+        self::NEGATIVE_DURATION_ERROR => 'Duration cannot be negative.',
         self::MISSING_DAY_ERROR => 'Could not find a valid day in the selected time range. Check the time range for absences and working days.',
         self::PROJECT_NOT_STARTED_ERROR => 'The project has not started during the selected time range.',
         self::PROJECT_ALREADY_ENDED_ERROR => 'The project is finished during the selected time range.',
