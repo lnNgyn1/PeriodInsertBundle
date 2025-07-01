@@ -1,3 +1,9 @@
+# Version 1.7
+
+Compatible with Kimai version 2.36.0 or higher.
+
+- Updated to make compatible with Kimai version 2.36.0
+
 # Version 1.6
 
 Compatible with Kimai version 2.26.0 or higher.

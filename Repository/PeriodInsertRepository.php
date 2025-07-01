@@ -36,7 +36,7 @@ class PeriodInsertRepository
         }
 
         foreach ($validatedTimesheets as $timesheet) {
-            $this->timesheetService->saveNewTimesheet($timesheet);
+            $this->timesheetService->saveTimesheet($timesheet);
         }
     }
 
