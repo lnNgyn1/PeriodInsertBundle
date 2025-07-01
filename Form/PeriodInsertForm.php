@@ -53,7 +53,7 @@ final class PeriodInsertForm extends TimesheetEditForm
         $currency = false;
         $isNew = true;
 
-        if (isset($options['data'])) {
+        if (isset($options['data']) && $options['data'] instanceof PeriodInsert) {
             /** @var PeriodInsert $periodInsert */
             $periodInsert = $options['data'];
 
