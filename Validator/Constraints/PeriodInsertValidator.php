@@ -61,6 +61,7 @@ final class PeriodInsertValidator extends ConstraintValidator
         $this->validateTimeRange($value);
         $this->validateActivityAndProject($value);
         $this->validateDuration($value);
+        $this->validateBreak($value);
 
         // only call validators if period insert has valid days to insert
         if ($this->validatePeriodInsert($value)) {
@@ -162,24 +163,51 @@ final class PeriodInsertValidator extends ConstraintValidator
      */
     private function validateDuration(PeriodInsertEntity $periodInsert): void
     {
-        if ($this->systemConfiguration->isTimesheetAllowZeroDuration()) {
+        $duration = $periodInsert->getDuration();
+
+        if (null !== $duration) {
+            if (!$this->systemConfiguration->isTimesheetAllowZeroDuration() && $duration === 0) {
+                $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::ZERO_DURATION_ERROR))
+                    ->atPath('duration')
+                    ->setTranslationDomain('validators')
+                    ->setCode(PeriodInsertConstraint::ZERO_DURATION_ERROR)
+                    ->addViolation();
+            }
+            elseif ($duration < 0) {
+                $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR))
+                    ->atPath('duration')
+                    ->setTranslationDomain('validators')
+                    ->setCode(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR)
+                    ->addViolation();
+            }
+        }
+    }
+
+    /**
+     * @param PeriodInsertEntity $periodInsert
+     */
+    private function validateBreak(PeriodInsertEntity $periodInsert): void
+    {
+        if (!$this->systemConfiguration->isBreakTimeEnabled()) {
             return;
         }
 
-        if (null !== $periodInsert->getDuration() && $periodInsert->getDuration() === 0) {
-            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::ZERO_DURATION_ERROR))
-                ->atPath('duration')
-                ->setTranslationDomain('validators')
-                ->setCode(PeriodInsertConstraint::ZERO_DURATION_ERROR)
-                ->addViolation();
-        }
+        $break = $periodInsert->getBreak();
+        $duration = $periodInsert->getDuration();
 
-        if (null !== $periodInsert->getDuration() && $periodInsert->getDuration() < 0) {
-            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR))
-                ->atPath('duration')
-                ->setTranslationDomain('validators')
-                ->setCode(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR)
-                ->addViolation();
+        if ($break < 0) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_BREAK_ERROR))
+            ->atPath('break')
+            ->setTranslationDomain('validators')
+            ->setCode(PeriodInsertConstraint::NEGATIVE_BREAK_ERROR)
+            ->addViolation();
+        }
+        elseif (null !== $duration && $duration > 0 && ($break > $duration || !$this->systemConfiguration->isTimesheetAllowZeroDuration() && $break === $duration)) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::BREAK_DURATION_ERROR))
+            ->atPath('break')
+            ->setTranslationDomain('validators')
+            ->setCode(PeriodInsertConstraint::BREAK_DURATION_ERROR)
+            ->addViolation();
         }
     }
 
@@ -329,8 +357,13 @@ final class PeriodInsertValidator extends ConstraintValidator
             return;
         }
 
-        // only check budget if duration is not negative
-        if (null !== $periodInsert->getDuration() && $periodInsert->getDuration() >= 0) {
+        // do not check budget if duration is negative
+        if (null === ($duration = $periodInsert->getCalculatedDuration()) || $duration < 0) {
+            return;
+        }
+
+        // do not check budget if break is negative
+        if ($periodInsert->getBreak() < 0) {
             return;
         }
 
@@ -346,7 +379,6 @@ final class PeriodInsertValidator extends ConstraintValidator
 
         $timeRate = $this->rateService->calculate($this->repository->createTimesheet($periodInsert, $recordDate));
         $rate = $timeRate->getRate();
-        $duration = $periodInsert->getDuration();
 
         $this->checkBudgetsForEntity($validDaysPerMonth, $recordDate, $now, $periodInsert, $rate, $duration, $periodInsert->getActivity(), $this->activityStatisticService, 'activity');
         $this->checkBudgetsForEntity($validDaysPerMonth, $recordDate, $now, $periodInsert, $rate, $duration, $project, $this->projectStatisticService, 'project');

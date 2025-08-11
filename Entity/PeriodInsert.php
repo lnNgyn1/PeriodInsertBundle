@@ -31,6 +31,7 @@ class PeriodInsert
     private ?DateRange $dateRange = null;
     private ?DateTime $beginTime = null;
     private ?int $duration = null;
+    private ?int $break = null;
     private ?Project $project = null;
     private ?Activity $activity = null;
     private ?string $description = null;
@@ -152,9 +153,40 @@ class PeriodInsert
      */
     public function setDuration(?int $duration): PeriodInsert
     {
-        $this->duration = $duration !== null ? $duration % PeriodInsert::SECONDS_IN_A_DAY : $duration;
+        $this->duration = ($duration ?? 0) % PeriodInsert::SECONDS_IN_A_DAY;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBreak(): int
+    {
+        return $this->break ?? 0;
+    }
+
+    /**
+     * @param int|null $break
+     * @return PeriodInsert
+     */
+    public function setBreak(?int $break): PeriodInsert
+    {
+        $this->break = ($break ?? 0) % PeriodInsert::SECONDS_IN_A_DAY;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCalculatedDuration(): ?int
+    {
+        if (null !== $this->getDuration()) {
+            return $this->getDuration() - $this->getBreak();
+        }
+        
+        return null;
     }
     
     /**

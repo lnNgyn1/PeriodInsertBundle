@@ -14,6 +14,9 @@
             {% if form.duration is defined %}
                 {{ form_row(form.duration, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.duration.vars.name}}) }}
             {% endif %}
+            {% if form.break is defined %}
+                {{ form_row(form.break, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.break.vars.name}}) }}
+            {% endif %}
             {% if form.customer is defined %}
                 {{ form_row(form.customer, {'row_attr': {'class': 'mb-3 ' ~ form.vars.name ~ '_row_' ~ form.customer.vars.name}}) }}
             {% endif %}

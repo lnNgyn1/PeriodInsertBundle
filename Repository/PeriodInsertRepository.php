@@ -54,6 +54,7 @@ class PeriodInsertRepository
         $timesheet->setBegin($begin);
         $timesheet->setEnd((clone $begin)->modify('+' . $periodInsert->getDuration() . ' seconds'));
         $timesheet->setDuration($periodInsert->getDuration());
+        $timesheet->setBreak($periodInsert->getBreak());
 
         if (null !== $periodInsert->getProject()) {
             $timesheet->setProject($periodInsert->getProject());
