@@ -30,9 +30,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class PeriodInsertController extends AbstractController
 {
     public function __construct(
-        protected PeriodInsertRepository $repository,
-        protected TimesheetService $timesheetService,
-        protected SystemConfiguration $configuration
+        protected readonly PeriodInsertRepository $repository,
+        protected readonly TimesheetService $timesheetService,
+        protected readonly SystemConfiguration $configuration
     )
     {
     }
