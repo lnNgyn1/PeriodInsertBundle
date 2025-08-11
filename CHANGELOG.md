@@ -1,3 +1,10 @@
+# Version 1.8.0
+
+Compatible with Kimai version 2.38.0 or higher.
+
+- Added break field
+- Fixed budget validator
+
 # Version 1.7.0
 
 Compatible with Kimai version 2.36.0 or higher.
