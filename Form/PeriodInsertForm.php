@@ -119,7 +119,7 @@ final class PeriodInsertForm extends TimesheetEditForm
         // find days that will be inserted by the period insert (by default, selected + no absences + working day)
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 /** @var PeriodInsert $periodInsert */
                 $periodInsert = $event->getData();
 
@@ -166,7 +166,7 @@ final class PeriodInsertForm extends TimesheetEditForm
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 /** @var PeriodInsert $periodInsert */
                 $periodInsert = $event->getData();
                 $dateRange = $periodInsert->getDateRange();
@@ -249,7 +249,7 @@ final class PeriodInsertForm extends TimesheetEditForm
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 /** @var PeriodInsert $periodInsert */
                 $periodInsert = $event->getData();
 
