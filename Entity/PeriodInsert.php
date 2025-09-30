@@ -153,7 +153,7 @@ class PeriodInsert
      */
     public function setDuration(?int $duration): PeriodInsert
     {
-        $this->duration = ($duration ?? 0) % PeriodInsert::SECONDS_IN_A_DAY;
+        $this->duration = $duration;
 
         return $this;
     }
@@ -172,7 +172,7 @@ class PeriodInsert
      */
     public function setBreak(?int $break): PeriodInsert
     {
-        $this->break = ($break ?? 0) % PeriodInsert::SECONDS_IN_A_DAY;
+        $this->break = $break;
 
         return $this;
     }

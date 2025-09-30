@@ -59,6 +59,7 @@ final class PeriodInsertValidator extends ConstraintValidator
         }
 
         $this->validateTimeRange($value);
+        $this->validateBeginTime($value);
         $this->validateActivityAndProject($value);
         $this->validateDuration($value);
         $this->validateBreak($value);
@@ -83,6 +84,93 @@ final class PeriodInsertValidator extends ConstraintValidator
                 ->setTranslationDomain('validators')
                 ->setCode(PeriodInsertConstraint::MISSING_TIME_RANGE_ERROR)
                 ->addViolation();
+        }
+    }
+
+    /**
+     * @param PeriodInsertEntity $periodInsert
+     */
+    private function validateBeginTime(PeriodInsertEntity $periodInsert): void
+    {
+        if (null === $periodInsert->getBeginTime()) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::MISSING_BEGIN_TIME_ERROR))
+                ->atPath('begin_time')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::MISSING_BEGIN_TIME_ERROR)
+                ->addViolation();
+        }
+    }
+
+    /**
+     * @param PeriodInsertEntity $periodInsert
+     */
+    private function validateDuration(PeriodInsertEntity $periodInsert): void
+    {
+        if (null === ($duration = $periodInsert->getDuration())) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::MISSING_DURATION_ERROR))
+                ->atPath('duration')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::MISSING_DURATION_ERROR)
+                ->addViolation();
+            
+            return;
+        }
+
+        if ($duration < 0) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR))
+                ->atPath('duration')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR)
+                ->addViolation();
+        }
+        elseif ($duration > 86400) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::INVALID_DURATION_ERROR))
+                ->atPath('duration')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::INVALID_DURATION_ERROR)
+                ->addViolation();
+        }
+        elseif (!$this->systemConfiguration->isTimesheetAllowZeroDuration() && $duration === 0) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::ZERO_DURATION_ERROR))
+                ->atPath('duration')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::ZERO_DURATION_ERROR)
+                ->addViolation();
+        }
+    }
+
+    /**
+     * @param PeriodInsertEntity $periodInsert
+     */
+    private function validateBreak(PeriodInsertEntity $periodInsert): void
+    {
+        if (!$this->systemConfiguration->isBreakTimeEnabled()) {
+            return;
+        }
+
+        $break = $periodInsert->getBreak();
+        $duration = $periodInsert->getDuration();
+
+        if ($break < 0) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_BREAK_ERROR))
+            ->atPath('break')
+            ->setTranslationDomain('validators')
+            ->setCode(PeriodInsertConstraint::NEGATIVE_BREAK_ERROR)
+            ->addViolation();
+        }
+        elseif ($break > 86400) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::INVALID_BREAK_ERROR))
+                ->atPath('break')
+                ->setTranslationDomain('validators')
+                ->setCode(PeriodInsertConstraint::INVALID_BREAK_ERROR)
+                ->addViolation();
+        }
+        elseif (null !== $duration && ($break > $duration || !$this->systemConfiguration->isTimesheetAllowZeroDuration() && $break === $duration)) {
+            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::BREAK_DURATION_ERROR))
+            ->atPath('break')
+            ->setTranslationDomain('validators')
+            ->setCode(PeriodInsertConstraint::BREAK_DURATION_ERROR)
+            ->addViolation();
         }
     }
 
@@ -155,59 +243,6 @@ final class PeriodInsertValidator extends ConstraintValidator
                 ->setTranslationDomain('validators')
                 ->setCode(PeriodInsertConstraint::DISABLED_CUSTOMER_ERROR)
                 ->addViolation();
-        }
-    }
-
-    /**
-     * @param PeriodInsertEntity $periodInsert
-     */
-    private function validateDuration(PeriodInsertEntity $periodInsert): void
-    {
-        $duration = $periodInsert->getDuration();
-
-        if (null !== $duration) {
-            if (!$this->systemConfiguration->isTimesheetAllowZeroDuration() && $duration === 0) {
-                $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::ZERO_DURATION_ERROR))
-                    ->atPath('duration')
-                    ->setTranslationDomain('validators')
-                    ->setCode(PeriodInsertConstraint::ZERO_DURATION_ERROR)
-                    ->addViolation();
-            }
-            elseif ($duration < 0) {
-                $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR))
-                    ->atPath('duration')
-                    ->setTranslationDomain('validators')
-                    ->setCode(PeriodInsertConstraint::NEGATIVE_DURATION_ERROR)
-                    ->addViolation();
-            }
-        }
-    }
-
-    /**
-     * @param PeriodInsertEntity $periodInsert
-     */
-    private function validateBreak(PeriodInsertEntity $periodInsert): void
-    {
-        if (!$this->systemConfiguration->isBreakTimeEnabled()) {
-            return;
-        }
-
-        $break = $periodInsert->getBreak();
-        $duration = $periodInsert->getDuration();
-
-        if ($break < 0) {
-            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::NEGATIVE_BREAK_ERROR))
-            ->atPath('break')
-            ->setTranslationDomain('validators')
-            ->setCode(PeriodInsertConstraint::NEGATIVE_BREAK_ERROR)
-            ->addViolation();
-        }
-        elseif (null !== $duration && $duration > 0 && ($break > $duration || !$this->systemConfiguration->isTimesheetAllowZeroDuration() && $break === $duration)) {
-            $this->context->buildViolation(PeriodInsertConstraint::getErrorName(PeriodInsertConstraint::BREAK_DURATION_ERROR))
-            ->atPath('break')
-            ->setTranslationDomain('validators')
-            ->setCode(PeriodInsertConstraint::BREAK_DURATION_ERROR)
-            ->addViolation();
         }
     }
 
