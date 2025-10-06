@@ -60,9 +60,9 @@ final class PeriodInsertValidator extends ConstraintValidator
 
         $this->validateTimeRange($value);
         $this->validateBeginTime($value);
-        $this->validateActivityAndProject($value);
         $this->validateDuration($value);
         $this->validateBreak($value);
+        $this->validateActivityAndProject($value);
 
         // only call validators if period insert has valid dates to insert
         if ($this->validatePeriodInsert($value)) {
