@@ -29,8 +29,8 @@ class PeriodInsertRepository
     {
         $validatedTimesheets = [];
 
-        foreach ($periodInsert->getValidDays() as $day) {
-            $timesheet = $this->createTimesheet($periodInsert, $day);
+        foreach ($periodInsert->getValidDates() as $date) {
+            $timesheet = $this->createTimesheet($periodInsert, $date);
             $this->timesheetService->validateTimesheet($timesheet);
             $validatedTimesheets[] = $timesheet;
         }
@@ -54,6 +54,7 @@ class PeriodInsertRepository
         $timesheet->setBegin($begin);
         $timesheet->setEnd((clone $begin)->modify('+' . $periodInsert->getDuration() . ' seconds'));
         $timesheet->setDuration($periodInsert->getDuration());
+        $timesheet->setBreak($periodInsert->getBreak());
 
         if (null !== $periodInsert->getProject()) {
             $timesheet->setProject($periodInsert->getProject());

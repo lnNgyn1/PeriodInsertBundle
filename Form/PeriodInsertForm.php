@@ -116,10 +116,10 @@ final class PeriodInsertForm extends TimesheetEditForm
         $this->addBillable($builder, $options);
         $this->addExported($builder, $options);
 
-        // find days that will be inserted by the period insert (by default, selected + no absences + working day)
+        // find dates that will be inserted by the period insert (by default, selected + no absences + working day)
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 /** @var PeriodInsert $periodInsert */
                 $periodInsert = $event->getData();
 
@@ -145,7 +145,7 @@ final class PeriodInsertForm extends TimesheetEditForm
                     }
 
                     if ($periodInsert->isDaySelected($begin) && ($includeAbsences || !in_array($begin->format('Y-m-d'), $absences)) && ($includeNonWorkdays || $contractModeCalculator->isWorkDay($begin))) {
-                        $periodInsert->addValidDay($begin);
+                        $periodInsert->addValidDate($begin);
                     }
                 }
             }
@@ -166,7 +166,7 @@ final class PeriodInsertForm extends TimesheetEditForm
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 /** @var PeriodInsert $periodInsert */
                 $periodInsert = $event->getData();
                 $dateRange = $periodInsert->getDateRange();
@@ -231,6 +231,10 @@ final class PeriodInsertForm extends TimesheetEditForm
         }
 
         $builder->add('duration', DurationType::class, $durationOptions);
+
+        if ($this->systemConfiguration->isBreakTimeEnabled()) {
+            $builder->add('break', DurationType::class, ['label' => 'break', 'required' => false, 'icon' => 'break']);
+        }
     }
 
     /**
@@ -245,7 +249,7 @@ final class PeriodInsertForm extends TimesheetEditForm
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 /** @var PeriodInsert $periodInsert */
                 $periodInsert = $event->getData();
 

@@ -25,12 +25,11 @@ use KimaiPlugin\PeriodInsertBundle\Validator\Constraints as Constraints;
 #[Constraints\PeriodInsert]
 class PeriodInsert
 {
-    private const SECONDS_IN_A_DAY = 24 * 60 * 60;
-
     private ?User $user = null;
     private ?DateRange $dateRange = null;
     private ?DateTime $beginTime = null;
     private ?int $duration = null;
+    private ?int $break = null;
     private ?Project $project = null;
     private ?Activity $activity = null;
     private ?string $description = null;
@@ -57,7 +56,7 @@ class PeriodInsert
     /**
      * @var DateTimeImmutable[]
      */
-    private array $validDays = [];
+    private array $validDates = [];
 
     public function __construct()
     {
@@ -152,9 +151,40 @@ class PeriodInsert
      */
     public function setDuration(?int $duration): PeriodInsert
     {
-        $this->duration = $duration !== null ? $duration % PeriodInsert::SECONDS_IN_A_DAY : $duration;
+        $this->duration = $duration;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBreak(): int
+    {
+        return $this->break ?? 0;
+    }
+
+    /**
+     * @param int|null $break
+     * @return PeriodInsert
+     */
+    public function setBreak(?int $break): PeriodInsert
+    {
+        $this->break = $break;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCalculatedDuration(): ?int
+    {
+        if (null !== $this->getDuration()) {
+            return $this->getDuration() - $this->getBreak();
+        }
+        
+        return null;
     }
     
     /**
@@ -508,21 +538,21 @@ class PeriodInsert
     /**
      * @return DateTimeImmutable[]
      */
-    public function getValidDays(): array
+    public function getValidDates(): array
     {
-        return $this->validDays;
+        return $this->validDates;
     }
 
     /**
      * @param DateTime
      * @return PeriodInsert
      */
-    public function addValidDay(DateTime $day): PeriodInsert
+    public function addValidDate(DateTime $date): PeriodInsert
     {
-        if (in_array($day, $this->validDays)) {
+        if (in_array($date, $this->validDates)) {
             return $this;
         }
-        $this->validDays[] = DateTimeImmutable::createFromMutable($day);
+        $this->validDates[] = DateTimeImmutable::createFromMutable($date);
 
         return $this;
     }
