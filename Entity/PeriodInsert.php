@@ -25,8 +25,6 @@ use KimaiPlugin\PeriodInsertBundle\Validator\Constraints as Constraints;
 #[Constraints\PeriodInsert]
 class PeriodInsert
 {
-    private const SECONDS_IN_A_DAY = 24 * 60 * 60;
-
     private ?User $user = null;
     private ?DateRange $dateRange = null;
     private ?DateTime $beginTime = null;
@@ -58,7 +56,7 @@ class PeriodInsert
     /**
      * @var DateTimeImmutable[]
      */
-    private array $validDays = [];
+    private array $validDates = [];
 
     public function __construct()
     {
@@ -540,21 +538,21 @@ class PeriodInsert
     /**
      * @return DateTimeImmutable[]
      */
-    public function getValidDays(): array
+    public function getValidDates(): array
     {
-        return $this->validDays;
+        return $this->validDates;
     }
 
     /**
      * @param DateTime
      * @return PeriodInsert
      */
-    public function addValidDay(DateTime $day): PeriodInsert
+    public function addValidDate(DateTime $date): PeriodInsert
     {
-        if (in_array($day, $this->validDays)) {
+        if (in_array($date, $this->validDates)) {
             return $this;
         }
-        $this->validDays[] = DateTimeImmutable::createFromMutable($day);
+        $this->validDates[] = DateTimeImmutable::createFromMutable($date);
 
         return $this;
     }

@@ -3,7 +3,7 @@
 Compatible with Kimai version 2.38.0 or higher.
 
 - Added break field
-- Fixed budget validator
+- Updated and fixed validator
 
 # Version 1.7.0
 

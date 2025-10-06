@@ -29,8 +29,8 @@ class PeriodInsertRepository
     {
         $validatedTimesheets = [];
 
-        foreach ($periodInsert->getValidDays() as $day) {
-            $timesheet = $this->createTimesheet($periodInsert, $day);
+        foreach ($periodInsert->getValidDates() as $date) {
+            $timesheet = $this->createTimesheet($periodInsert, $date);
             $this->timesheetService->validateTimesheet($timesheet);
             $validatedTimesheets[] = $timesheet;
         }
